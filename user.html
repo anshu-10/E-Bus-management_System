@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Buses</title>
+
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase/config.js"></script>
+
+  <!-- Link your styled CSS file here -->
+  <link rel="stylesheet" href="CSS/style.css">
+</head>
+
+<body>
+  <nav>E-Bus System</nav>
+
+  <div class="container">
+    <h2>Search for Buses</h2>
+
+    <div class="form-group">
+      <input type="text" id="src" placeholder="Enter Source">
+      <input type="text" id="dest" placeholder="Enter Destination">
+      <button onclick="searchBus()">Search</button>
+    </div>
+
+    <div id="results"></div>
+  </div>
+
+  <footer>© 2025 E-Bus Tracker | All rights reserved</footer>
+</body>
+
+</html>
+
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase/config.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="CSS/style.css">
+</head>
+
+<body>
+  <nav>Admin Panel - E-Bus System</nav>
+
+  <div class="container">
+    <h2>Admin Dashboard</h2>
+    <div class="form-group">
+      <button onclick="loadBuses()">Load All Bus Details</button>
+    </div>
+    <div id="busList"></div>
+  </div>
+
+  <footer>© 2025 E-Bus Tracker | Admin Panel</footer>
+
+  <script>
+    function loadBuses() {
+      db.collection("buses")
+        .orderBy("time", "desc")
+        .get()
+        .then(snapshot => {
+          let html = "<h3>All Posted Buses:</h3>";
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            html += `
+              <div>
+                <strong>Bus:</strong> ${data.busName} (${data.busType})<br>
+                <strong>Route:</strong> ${data.source} → ${data.destination}<br>
+                <strong>Contact:</strong> ${data.contact}<br>
+                <strong>Posted at:</strong> ${data.time}<br>
+                <button onclick="deleteBus('${doc.id}')">Delete</button>
+              </div>
+            `;
+          });
+          document.getElementById("busList").innerHTML = html || "No buses found.";
+        })
+        .catch(error => alert("Error fetching buses: " + error.message));
+    }
+
+    function deleteBus(docId) {
+      if (confirm("Are you sure you want to delete this bus?")) {
+        db.collection("buses").doc(docId).delete()
+          .then(() => {
+            alert("Bus deleted.");
+            loadBuses(); // refresh list
+          })
+          .catch(err => alert("Error deleting: " + err.message));
+      }
+    }
+  </script>
+</body>
+</html>
