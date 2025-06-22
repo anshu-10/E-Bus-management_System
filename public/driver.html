@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Driver Panel</title>
+
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase/config.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="CSS/style.css">
+</head>
+
+<body>
+  <!-- Top nav -->
+  <nav>Driver Panel - E-Bus System</nav>
+
+  <!-- Container -->
+  <div class="container">
+    <h2>Post Your Bus Info</h2>
+
+    <div class="form-group">
+      <input id="busName" placeholder="Bus Name" type="text">
+      <input id="source" placeholder="Source" type="text">
+      <input id="destination" placeholder="Destination" type="text">
+      <input id="busType" placeholder="Bus Type (AC/Non-AC)" type="text">
+      <input id="contact" placeholder="Contact Number" type="text">
+      <button onclick="postBus()">🚌 Submit Bus</button>
+    </div>
+
+    <div class="spinner" id="loadingSpinner"></div>
+    <p id="message" style="text-align:center; color:green; font-weight:bold;"></p>
+  </div>
+
+  <!-- Footer -->
+  <footer>© 2025 E-Bus Tracker | Driver Panel</footer>
+
+  <!-- Script -->
+  <script>
+    const spinner = document.getElementById("loadingSpinner");
+    const message = document.getElementById("message");
+
+    function postBus() {
+      // Clear previous message
+      message.textContent = "";
+      spinner.style.display = "block";
+
+      const busData = {
+        busName: document.getElementById("busName").value,
+        source: document.getElementById("source").value,
+        destination: document.getElementById("destination").value,
+        busType: document.getElementById("busType").value,
+        contact: document.getElementById("contact").value,
+        time: new Date().toLocaleString()
+      };
+
+      db.collection("buses").add(busData)
+        .then(() => {
+          spinner.style.display = "none";
+          message.textContent = "✅ Bus info uploaded successfully!";
+          clearForm();
+        })
+        .catch(err => {
+          spinner.style.display = "none";
+          alert("❌ Error: " + err.message);
+        });
+    }
+
+    function clearForm() {
+      document.getElementById("busName").value = "";
+      document.getElementById("source").value = "";
+      document.getElementById("destination").value = "";
+      document.getElementById("busType").value = "";
+      document.getElementById("contact").value = "";
+    }
+  </script>
+</body>
+</html>
+
+

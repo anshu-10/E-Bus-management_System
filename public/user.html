@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Buses</title>
+
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase/config.js"></script>
+
+  <!-- Link your styled CSS file here -->
+  <link rel="stylesheet" href="CSS/style.css">
+</head>
+
+<body>
+  <nav>E-Bus System</nav>
+
+  <div class="container">
+    <h2>Search for Buses</h2>
+
+    <div class="form-group">
+      <input type="text" id="src" placeholder="Enter Source">
+      <input type="text" id="dest" placeholder="Enter Destination">
+      <button onclick="searchBus()">Search</button>
+    </div>
+
+    <!-- Spinner for loading -->
+    <div class="spinner" id="loadingSpinner"></div>
+
+    <!-- Search result display -->
+    <div id="results"></div>
+  </div>
+
+  <footer>© 2025 E-Bus Tracker | All rights reserved</footer>
+
+  <!-- ✅ Add the missing script here -->
+  <script>
+    function searchBus() {
+      const src = document.getElementById("src").value.trim();
+      const dest = document.getElementById("dest").value.trim();
+      const spinner = document.getElementById("loadingSpinner");
+      const resultsDiv = document.getElementById("results");
+
+      if (!src || !dest) {
+        alert("Please enter both source and destination");
+        return;
+      }
+
+      // Show loading
+      spinner.style.display = "block";
+      resultsDiv.innerHTML = "";
+
+      db.collection("buses")
+        .where("source", "==", src)
+        .where("destination", "==", dest)
+        .get()
+        .then(snapshot => {
+          spinner.style.display = "none"; // Hide spinner
+          let html = "";
+
+          if (snapshot.empty) {
+            html = "❌ No buses found for this route.";
+          } else {
+            html = "<h3>Available Buses:</h3>";
+            snapshot.forEach(doc => {
+              const data = doc.data();
+              html += `
+                <p><strong>${data.busName}</strong> (${data.busType})<br>
+                Contact: ${data.contact}</p>
+              `;
+            });
+          }
+
+          resultsDiv.innerHTML = html;
+        })
+        .catch(error => {
+          console.error("Error searching buses:", error);
+          spinner.style.display = "none";
+          resultsDiv.innerHTML = "❌ Error searching buses.";
+        });
+    }
+  </script>
+</body>
+</html>
+
+
