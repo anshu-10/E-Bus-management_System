@@ -1,6 +1,5 @@
 // firebase/config.js
 
-// Firebase compat version setup (suitable for script-based HTML apps)
 const firebaseConfig = {
   apiKey: "AIzaSyDTNT5g94Qyj1-vDjhapA_uPlbRH53d0kA",
   authDomain: "e-bus-management-system-45082.firebaseapp.com",
@@ -11,12 +10,7 @@ const firebaseConfig = {
   measurementId: "G-EYB6VSSBJ6"
 };
 
-// Initialize Firebase using compat version
 firebase.initializeApp(firebaseConfig);
+window.db = firebase.firestore();
+window.auth = firebase.auth();
 
-// Setup global access for Firestore and Auth
-const db = firebase.firestore();
-const auth = firebase.auth();
-
-window.db = db;
-window.auth = auth;

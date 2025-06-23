@@ -3,11 +3,16 @@
 <head>
   <title>Admin Dashboard</title>
 
-  <!-- Firebase scripts -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase Config -->
   <script src="firebase/config.js"></script>
+
+  <!-- Main Logic -->
+  <script src="js/script.js"></script>
 
   <!-- CSS -->
   <link rel="stylesheet" href="CSS/style.css">
@@ -32,59 +37,7 @@
   </div>
 
   <footer>© 2025 E-Bus Tracker | Admin Panel</footer>
-
-  <!-- JS -->
-  <script>
-    const spinner = document.getElementById("loadingSpinner");
-    const busList = document.getElementById("busList");
-
-    function loadBuses() {
-      spinner.style.display = "block";
-      busList.innerHTML = "";
-
-      db.collection("buses")
-        .orderBy("time", "desc")
-        .get()
-        .then(snapshot => {
-          let html = "<h3>All Posted Buses:</h3>";
-
-          if (snapshot.empty) {
-            html += "<p>No buses found.</p>";
-          }
-
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            html += `
-              <div>
-                <strong>Bus:</strong> ${data.busName} (${data.busType})<br>
-                <strong>Route:</strong> ${data.source} → ${data.destination}<br>
-                <strong>Contact:</strong> ${data.contact}<br>
-                <strong>Posted at:</strong> ${data.time}<br>
-                <button onclick="deleteBus('${doc.id}')">🗑 Delete</button>
-              </div>
-            `;
-          });
-
-          busList.innerHTML = html;
-          spinner.style.display = "none";
-        })
-        .catch(error => {
-          alert("❌ Error fetching buses: " + error.message);
-          spinner.style.display = "none";
-        });
-    }
-
-    function deleteBus(docId) {
-      if (confirm("Are you sure you want to delete this bus?")) {
-        db.collection("buses").doc(docId).delete()
-          .then(() => {
-            alert("✅ Bus deleted.");
-            loadBuses(); // refresh
-          })
-          .catch(err => alert("❌ Error deleting: " + err.message));
-      }
-    }
-  </script>
 </body>
 </html>
+
 

@@ -3,25 +3,6 @@
 <head>
   <title>E-Bus Login</title>
 
-  <!-- Firebase Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-  <!-- Firebase Config Inline (if config.js is not working) -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDTNT5g94Qyj1-vDjhapA_uPlbRH53d0kA",
-      authDomain: "e-bus-management-system-45082.firebaseapp.com",
-      projectId: "e-bus-management-system-45082",
-      storageBucket: "e-bus-management-system-45082.appspot.com",
-      messagingSenderId: "512855889809",
-      appId: "1:512855889809:web:387f41b9b144bf84e2ac30",
-      measurementId: "G-EYB6VSSBJ6"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-  </script>
-
   <!-- Styles -->
   <link rel="stylesheet" href="CSS/style.css">
 </head>
@@ -30,38 +11,24 @@
   <div class="container">
     <h2>Login / Register</h2>
 
-    <input type="email" id="email" placeholder="Email"><br>
-    <input type="password" id="password" placeholder="Password"><br>
+    <!-- Inside body -->
+<input type="text" id="name" placeholder="Full Name"><br>
+<input type="email" id="email" placeholder="Email"><br>
+<input type="password" id="password" placeholder="Password"><br>
+
 
     <button onclick="register()">Register</button>
     <button onclick="login()">Login</button>
   </div>
 
-  <script>
-    function register() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          alert("✅ Registered successfully!");
-          window.location.href = "user.html";
-        })
-        .catch(error => alert("❌ " + error.message));
-    }
-
-    function login() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          alert("✅ Login successful!");
-          window.location.href = "user.html";
-        })
-        .catch(error => alert("❌ " + error.message));
-    }
-  </script>
+  <!-- Firebase Config & Central Script -->
+  <script src="firebase/config.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
 

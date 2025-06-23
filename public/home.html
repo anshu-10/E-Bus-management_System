@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to E-Bus System</title>
+  <link rel="stylesheet" href="CSS/style.css">
+  <style>
+    body {
+      background-image: url("https://source.unsplash.com/1600x900/?bus,road");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      backdrop-filter: blur(2px);
+    }
+
+    .home-container {
+      max-width: 800px;
+      margin: auto;
+      text-align: center;
+      padding: 3rem;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+
+    .home-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .home-buttons a {
+      display: block;
+      padding: 1.2rem;
+      background-color: var(--primary);
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 6px 12px var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .home-buttons a:hover {
+      background-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .logo-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <nav>E-Bus Tracker - Welcome</nav>
+
+  <div class="home-container">
+    <div class="logo-title">E-Bus Management System</div>
+    <div class="subtitle">Navigate to the section you need</div>
+    <p id="welcomeMsg" style="margin-top:1rem; font-weight: 500;"></p>
+    <button onclick="logout()" style="margin-top: 1rem; padding: 0.6rem 1.2rem; border: none; border-radius: 8px; background: var(--accent); color: white; font-weight: bold;">🚪 Logout</button>
+
+    <div class="home-buttons">
+      <a href="index.html">🔐 Login</a>
+      <a href="driver.html">🚌 Driver Panel</a>
+      <a href="admin.html">🛠️ Admin Dashboard</a>
+      <a href="user.html">🔎 Search Buses</a>
+    </div>
+  </div>
+
+  <footer>© 2025 E-Bus Tracker | Built by Anshu</footer>
+
+  <!-- ✅ Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase/config.js"></script>
+
+  <!-- ✅ Auth Logic -->
+  <script>
+    auth.onAuthStateChanged(user => {
+  if (user) {
+    db.collection("users").doc(user.uid).get()
+      .then(doc => {
+        if (doc.exists) {
+          const name = doc.data().name;
+          document.getElementById("welcomeMsg").textContent = "Welcome, " + name + " 👋";
+        } else {
+          document.getElementById("welcomeMsg").textContent = "Welcome!";
+        }
+      })
+      .catch(() => {
+        document.getElementById("welcomeMsg").textContent = "Welcome!";
+      });
+  } else {
+    document.getElementById("welcomeMsg").textContent = "You're not logged in.";
+  }
+});
+
+
+    function logout() {
+      auth.signOut().then(() => {
+        alert("You’ve been logged out.");
+        window.location.reload();
+      });
+    }
+  </script>
+</body>
+</html>
+
