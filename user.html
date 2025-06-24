@@ -7,12 +7,10 @@
   <link rel="stylesheet" href="CSS/style.css" />
 
   <!-- ✅ Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-<script type="module" src="/firebase/config.js"></script>
-
-  
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+  <script type="module" src="/firebase/config.js"></script>
 </head>
 
 <body>
@@ -23,26 +21,65 @@
 
     <input type="text" id="src" placeholder="Enter Source" />
     <input type="text" id="dest" placeholder="Enter Destination" />
-    <button onclick="findBus()">Search</button>
+    <button id="searchBtn">Search</button>
 
-    <div class="spinner" id="loadingSpinner">Searching...</div>
-
+    <div class="spinner" id="loadingSpinner" style="display: none;">🔍 Searching...</div>
     <div id="results"></div>
   </div>
 
   <footer>© 2025 E-Bus Tracker | All Rights Reserved</footer>
 
-  <!-- Firebase Scripts -->
+  <!-- ✅ Firebase Logic -->
   <script type="module">
-    import { searchBus } from './js/script.js';
+    import { searchBuses } from './js/script.js';
 
-    window.findBus = function () {
+    const searchBtn = document.getElementById("searchBtn");
+    const loadingSpinner = document.getElementById("loadingSpinner");
+    const resultsDiv = document.getElementById("results");
+
+    searchBtn.addEventListener("click", () => {
       const src = document.getElementById("src").value.trim();
       const dest = document.getElementById("dest").value.trim();
-      searchBus(src, dest);
-    };
+
+      if (!src || !dest) {
+        alert("❌ Please enter both source and destination.");
+        return;
+      }
+
+      loadingSpinner.style.display = "block";
+      resultsDiv.innerHTML = "";
+
+      searchBuses(src, dest)
+        .then(snapshot => {
+          loadingSpinner.style.display = "none";
+          if (snapshot.empty) {
+            resultsDiv.innerHTML = "<p>❌ No buses found for this route.</p>";
+            return;
+          }
+
+          let html = "<h3>Available Buses:</h3>";
+          snapshot.forEach(doc => {
+            const bus = doc.data();
+            html += `
+              <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+                <strong>${bus.busName}</strong> (${bus.busType})<br>
+                Route: ${bus.source} → ${bus.destination}<br>
+                Contact: ${bus.contact}<br>
+                Posted: ${bus.time}
+              </div>
+            `;
+          });
+
+          resultsDiv.innerHTML = html;
+        })
+        .catch(error => {
+          loadingSpinner.style.display = "none";
+          resultsDiv.innerHTML = `<p>❌ Error: ${error.message}</p>`;
+        });
+    });
   </script>
 </body>
 </html>
+
 
 

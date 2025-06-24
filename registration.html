@@ -7,12 +7,10 @@
   <link rel="stylesheet" href="CSS/style.css" />
 
   <!-- ✅ Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-<script type="module" src="/firebase/config.js"></script>
-
-  
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+  <script type="module" src="/firebase/config.js"></script>
 </head>
 
 <body>
@@ -23,26 +21,29 @@
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Password" />
 
-    <button onclick="handleRegister()">Register</button>
-    <button onclick="handleLogin()">Login</button>
+    <button id="registerBtn">Register</button>
+    <button id="loginBtn">Login</button>
   </div>
 
-  <!-- Firebase Logic -->
+  <!-- ✅ Firebase Auth Logic -->
   <script type="module">
     import { register, login } from './js/script.js';
 
-    window.handleRegister = function () {
+    const registerBtn = document.getElementById("registerBtn");
+    const loginBtn = document.getElementById("loginBtn");
+
+    registerBtn.addEventListener("click", () => {
       const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       register(name, email, password);
-    };
+    });
 
-    window.handleLogin = function () {
+    loginBtn.addEventListener("click", () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       login(email, password);
-    };
+    });
   </script>
 </body>
 </html>

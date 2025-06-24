@@ -7,12 +7,10 @@
   <link rel="stylesheet" href="CSS/style.css" />
 
   <!-- ✅ Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
-<script type="module" src="/firebase/config.js"></script>
-
-  
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+  <script type="module" src="/firebase/config.js"></script>
 </head>
 
 <body>
@@ -27,19 +25,19 @@
     <input id="busType" placeholder="Bus Type (AC/Non-AC)" type="text" />
     <input id="contact" placeholder="Contact Number" type="text" />
 
-    <button onclick="submitBusInfo()">🚌 Submit Bus</button>
+    <button id="submitBtn">🚌 Submit Bus</button>
 
-    <div class="spinner" id="loadingSpinner">Uploading...</div>
+    <div class="spinner" id="loadingSpinner" style="display: none;">Uploading...</div>
     <p id="message"></p>
   </div>
 
   <footer>© 2025 E-Bus Tracker | Driver Panel</footer>
 
-  <!-- Firebase Script -->
+  <!-- ✅ Firebase Logic -->
   <script type="module">
     import { postBus } from './js/script.js';
 
-    window.submitBusInfo = function () {
+    document.getElementById("submitBtn").addEventListener("click", () => {
       const busData = {
         busName: document.getElementById("busName").value.trim(),
         source: document.getElementById("source").value.trim(),
@@ -53,8 +51,19 @@
         return;
       }
 
+      // Show loading spinner
+      document.getElementById("loadingSpinner").style.display = "block";
+      document.getElementById("message").textContent = "";
+
+      // Call postBus
       postBus(busData);
-    };
+
+      // Optional: hide spinner after delay
+      setTimeout(() => {
+        document.getElementById("loadingSpinner").style.display = "none";
+      }, 2000);
+    });
   </script>
 </body>
 </html>
+

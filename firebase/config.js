@@ -1,9 +1,9 @@
 // firebase/config.js
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
+// Your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyCSCFXb9i4Zu_iPN-3u4_yi_HEOEIxvxhM",
   authDomain: "e-bus-tracker-v1.firebaseapp.com",
@@ -14,9 +14,11 @@ const firebaseConfig = {
   measurementId: "G-XDSJWLQBJ1"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { app, analytics, auth, db };
+// Export to other files
+export { auth, db };
+
