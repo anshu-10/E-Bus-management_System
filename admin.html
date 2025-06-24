@@ -1,21 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="CSS/style.css" />
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+    }
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    nav, footer {
+      background-color: #343a40;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
 
-  <!-- Firebase Config -->
-  <script src="firebase/config.js"></script>
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
 
-  <!-- Main Logic -->
-  <script src="js/script.js"></script>
+    button {
+      padding: 0.7rem 1.5rem;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="CSS/style.css">
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .spinner {
+      display: none;
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    #busList div {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background-color: #f9f9f9;
+      border-left: 5px solid #007BFF;
+      border-radius: 5px;
+    }
+
+    #busList button {
+      background-color: red;
+      margin-top: 0.5rem;
+      border-radius: 4px;
+    }
+
+    #busList button:hover {
+      background-color: darkred;
+    }
+  </style>
 </head>
 
 <body>
@@ -24,20 +75,21 @@
   <div class="container">
     <h2>Admin Dashboard</h2>
 
-    <!-- Load Button -->
-    <div class="form-group">
-      <button onclick="loadBuses()">📥 Load All Bus Details</button>
-    </div>
+    <button onclick="loadBuses()">📥 Load All Bus Details</button>
 
-    <!-- Spinner -->
-    <div class="spinner" id="loadingSpinner"></div>
+    <div class="spinner" id="loadingSpinner">Loading buses...</div>
 
-    <!-- Results -->
     <div id="busList"></div>
   </div>
 
   <footer>© 2025 E-Bus Tracker | Admin Panel</footer>
+
+  <!-- Firebase Scripts -->
+  <script type="module">
+    import { loadBuses, deleteBus } from './js/script.js';
+
+    window.loadBuses = loadBuses;
+    window.deleteBus = deleteBus;
+  </script>
 </body>
 </html>
-
-

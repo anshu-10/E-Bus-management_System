@@ -1,48 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Driver Panel</title>
+  <link rel="stylesheet" href="CSS/style.css" />
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+    }
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    nav, footer {
+      background-color: #007BFF;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
 
-  <!-- Firebase Config (after SDKs!) -->
-  <script src="firebase/config.js"></script>
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
 
-  <!-- JavaScript Logic -->
-  <script src="js/script.js"></script>
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="CSS/style.css">
+    button {
+      margin-top: 1rem;
+      padding: 0.7rem 1.5rem;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1f7f36;
+    }
+
+    .spinner {
+      margin: 10px auto;
+      text-align: center;
+      display: none;
+    }
+
+    #message {
+      margin-top: 10px;
+      color: green;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Top nav -->
   <nav>Driver Panel - E-Bus System</nav>
 
-  <!-- Container -->
   <div class="container">
     <h2>Post Your Bus Info</h2>
 
-    <div class="form-group">
-      <input id="busName" placeholder="Bus Name" type="text">
-      <input id="source" placeholder="Source" type="text">
-      <input id="destination" placeholder="Destination" type="text">
-      <input id="busType" placeholder="Bus Type (AC/Non-AC)" type="text">
-      <input id="contact" placeholder="Contact Number" type="text">
-      <button onclick="postBus()">🚌 Submit Bus</button>
-    </div>
+    <input id="busName" placeholder="Bus Name" type="text" />
+    <input id="source" placeholder="Source" type="text" />
+    <input id="destination" placeholder="Destination" type="text" />
+    <input id="busType" placeholder="Bus Type (AC/Non-AC)" type="text" />
+    <input id="contact" placeholder="Contact Number" type="text" />
 
-    <div class="spinner" id="loadingSpinner"></div>
-    <p id="message" style="text-align:center; color:green; font-weight:bold;"></p>
+    <button onclick="submitBusInfo()">🚌 Submit Bus</button>
+
+    <div class="spinner" id="loadingSpinner">Uploading...</div>
+    <p id="message"></p>
   </div>
 
-  <!-- Footer -->
   <footer>© 2025 E-Bus Tracker | Driver Panel</footer>
+
+  <!-- Firebase Script -->
+  <script type="module">
+    import { postBus } from './js/script.js';
+
+    window.submitBusInfo = function () {
+      const busData = {
+        busName: document.getElementById("busName").value.trim(),
+        source: document.getElementById("source").value.trim(),
+        destination: document.getElementById("destination").value.trim(),
+        busType: document.getElementById("busType").value.trim(),
+        contact: document.getElementById("contact").value.trim(),
+      };
+
+      if (Object.values(busData).some(field => !field)) {
+        alert("❌ Please fill all the fields.");
+        return;
+      }
+
+      postBus(busData);
+    };
+  </script>
 </body>
 </html>
-
-
-

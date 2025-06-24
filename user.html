@@ -1,45 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Search Buses</title>
+  <link rel="stylesheet" href="CSS/style.css" />
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+    }
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    nav, footer {
+      background-color: #007BFF;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
 
-  <!-- Firebase Config -->
-  <script src="firebase/config.js"></script>
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
 
-  <!-- Centralized Logic -->
-  <script src="js/script.js"></script>
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="CSS/style.css">
+    button {
+      margin-top: 1rem;
+      padding: 0.7rem 1.5rem;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1f7f36;
+    }
+
+    .spinner {
+      display: none;
+      margin: 1rem auto;
+      text-align: center;
+    }
+
+    #results {
+      margin-top: 1rem;
+    }
+
+    #results p {
+      background: #e9f7ef;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      border-left: 5px solid #28a745;
+    }
+  </style>
 </head>
 
 <body>
-  <nav>E-Bus System</nav>
+  <nav>E-Bus System - Search Bus</nav>
 
   <div class="container">
     <h2>Search for Buses</h2>
 
-    <div class="form-group">
-      <input type="text" id="src" placeholder="Enter Source">
-      <input type="text" id="dest" placeholder="Enter Destination">
-      <button onclick="searchBus()">Search</button>
-    </div>
+    <input type="text" id="src" placeholder="Enter Source" />
+    <input type="text" id="dest" placeholder="Enter Destination" />
+    <button onclick="findBus()">Search</button>
 
-    <!-- Spinner for loading -->
-    <div class="spinner" id="loadingSpinner"></div>
+    <div class="spinner" id="loadingSpinner">Searching...</div>
 
-    <!-- Search result display -->
     <div id="results"></div>
   </div>
 
-  <footer>© 2025 E-Bus Tracker | All rights reserved</footer>
+  <footer>© 2025 E-Bus Tracker | All Rights Reserved</footer>
+
+  <!-- Firebase Scripts -->
+  <script type="module">
+    import { searchBus } from './js/script.js';
+
+    window.findBus = function () {
+      const src = document.getElementById("src").value.trim();
+      const dest = document.getElementById("dest").value.trim();
+      searchBus(src, dest);
+    };
+  </script>
 </body>
 </html>
-
 
 

@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome to E-Bus System</title>
-  <link rel="stylesheet" href="CSS/style.css">
+  <link rel="stylesheet" href="CSS/style.css" />
   <style>
     body {
       background-image: url("https://source.unsplash.com/1600x900/?bus,road");
@@ -19,7 +21,7 @@
       padding: 3rem;
       background-color: rgba(255, 255, 255, 0.9);
       border-radius: 16px;
-      box-shadow: 0 8px 24px var(--shadow);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     }
 
     .home-buttons {
@@ -32,24 +34,24 @@
     .home-buttons a {
       display: block;
       padding: 1.2rem;
-      background-color: var(--primary);
+      background-color: #007BFF;
       color: white;
       font-weight: bold;
       border-radius: 10px;
       text-decoration: none;
-      box-shadow: 0 6px 12px var(--shadow);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
       transition: all 0.3s ease;
     }
 
     .home-buttons a:hover {
-      background-color: var(--accent);
+      background-color: #0056b3;
       transform: translateY(-3px);
     }
 
     .logo-title {
       font-size: 2.5rem;
       font-weight: bold;
-      color: var(--primary);
+      color: #007BFF;
     }
 
     .subtitle {
@@ -57,8 +59,17 @@
       margin-top: 0.5rem;
       color: #555;
     }
+
+    nav, footer {
+      background-color: #007BFF;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
   </style>
 </head>
+
 <body>
   <nav>E-Bus Tracker - Welcome</nav>
 
@@ -66,10 +77,10 @@
     <div class="logo-title">E-Bus Management System</div>
     <div class="subtitle">Navigate to the section you need</div>
     <p id="welcomeMsg" style="margin-top:1rem; font-weight: 500;"></p>
-    <button onclick="logout()" style="margin-top: 1rem; padding: 0.6rem 1.2rem; border: none; border-radius: 8px; background: var(--accent); color: white; font-weight: bold;">🚪 Logout</button>
+    <button onclick="logoutUser()" style="margin-top: 1rem; padding: 0.6rem 1.2rem; border: none; border-radius: 8px; background: #28a745; color: white; font-weight: bold;">🚪 Logout</button>
 
     <div class="home-buttons">
-      <a href="index2.html">🔐 Login</a>
+      <a href="registration.html">🔐 Login / Register</a>
       <a href="driver.html">🚌 Driver Panel</a>
       <a href="admin.html">🛠️ Admin Dashboard</a>
       <a href="user.html">🔎 Search Buses</a>
@@ -78,54 +89,11 @@
 
   <footer>© 2025 E-Bus Tracker | Built by Anshu</footer>
 
-  <!-- ✅ Firebase Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-  <script src="firebase/config.js"></script>
-
-  <!-- ✅ Auth Logic -->
-  <script>
-    // Wait until Firebase is fully loaded
-    window.addEventListener('load', () => {
-      if (typeof auth === 'undefined' || typeof db === 'undefined') {
-        console.error("❌ Firebase 'auth' or 'db' not defined. Check firebase/config.js");
-        return;
-      }
-
-      auth.onAuthStateChanged(user => {
-        if (user) {
-          db.collection("users").doc(user.uid).get()
-            .then(doc => {
-              if (doc.exists) {
-                const name = doc.data().name;
-                document.getElementById("welcomeMsg").textContent = "Welcome, " + name + " 👋";
-              } else {
-                document.getElementById("welcomeMsg").textContent = "Welcome!";
-              }
-            })
-            .catch((error) => {
-              console.warn("Firestore error:", error);
-              document.getElementById("welcomeMsg").textContent = "Welcome!";
-            });
-        } else {
-          document.getElementById("welcomeMsg").textContent = "You're not logged in.";
-        }
-      });
-
-      // Logout button handler
-      window.logout = function () {
-        auth.signOut().then(() => {
-          alert("You’ve been logged out.");
-          window.location.reload();
-        }).catch(error => {
-          console.error("Logout error:", error);
-        });
-      };
-    });
+  <!-- Firebase & App Logic -->
+  <script type="module">
+    import { initUserWelcome, logoutUser } from './js/script.js';
+    initUserWelcome();
+    window.logoutUser = logoutUser;
   </script>
 </body>
 </html>
-
-

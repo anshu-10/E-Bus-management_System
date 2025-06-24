@@ -1,18 +1,25 @@
 // js/script.js
+import { auth, db } from "../firebase/config.js";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "firebase/auth";
+import {
+  collection, addDoc, doc, getDoc, getDocs,
+  deleteDoc, query, where, orderBy
+} from "firebase/firestore";
 
-function register() {
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-
+export function register(name, email, password) {
   if (!name || !email || !password) {
     alert("Please fill all fields.");
     return;
   }
 
-  auth.createUserWithEmailAndPassword(email, password)
+  createUserWithEmailAndPassword(auth, email, password)
     .then(cred => {
-      return db.collection("users").doc(cred.user.uid).set({ name: name });
+      return addDoc(collection(db, "users"), { uid: cred.user.uid, name });
     })
     .then(() => {
       alert("✅ Registered successfully!");
@@ -21,12 +28,8 @@ function register() {
     .catch(error => alert("❌ " + error.message));
 }
 
-
-function login() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  auth.signInWithEmailAndPassword(email, password)
+export function login(email, password) {
+  signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("✅ Login successful!");
       window.location.href = "user.html";
@@ -34,56 +37,56 @@ function login() {
     .catch(error => alert("❌ " + error.message));
 }
 
-function postBus() {
-  const spinner = document.getElementById("loadingSpinner");
-  const message = document.getElementById("message");
-  message.textContent = "";
-  spinner.style.display = "block";
+export function logoutUser() {
+  signOut(auth).then(() => {
+    alert("You’ve been logged out.");
+    window.location.reload();
+  }).catch(error => {
+    console.error("Logout error:", error);
+  });
+}
 
-  const busData = {
-    busName: document.getElementById("busName").value,
-    source: document.getElementById("source").value,
-    destination: document.getElementById("destination").value,
-    busType: document.getElementById("busType").value,
-    contact: document.getElementById("contact").value,
+export function postBus(busData) {
+  document.getElementById("loadingSpinner").style.display = "block";
+  document.getElementById("message").textContent = "";
+
+  addDoc(collection(db, "buses"), {
+    ...busData,
     time: new Date().toLocaleString()
-  };
-
-  db.collection("buses").add(busData)
-    .then(() => {
-      spinner.style.display = "none";
-      message.textContent = "✅ Bus info uploaded successfully!";
-      clearForm();
-    })
-    .catch(err => {
-      spinner.style.display = "none";
-      alert("❌ Error: " + err.message);
-    });
+  }).then(() => {
+    document.getElementById("loadingSpinner").style.display = "none";
+    document.getElementById("message").textContent = "✅ Bus info uploaded successfully!";
+    clearForm();
+  }).catch(err => {
+    document.getElementById("loadingSpinner").style.display = "none";
+    alert("❌ Error: " + err.message);
+  });
 }
 
-function clearForm() {
-  ["busName", "source", "destination", "busType", "contact"].forEach(id => document.getElementById(id).value = "");
+export function clearForm() {
+  ["busName", "source", "destination", "busType", "contact"]
+    .forEach(id => document.getElementById(id).value = "");
 }
 
-function loadBuses() {
+export function loadBuses() {
   const spinner = document.getElementById("loadingSpinner");
   const busList = document.getElementById("busList");
   spinner.style.display = "block";
   busList.innerHTML = "";
 
-  db.collection("buses").orderBy("time", "desc").get()
+  getDocs(query(collection(db, "buses"), orderBy("time", "desc")))
     .then(snapshot => {
       let html = "<h3>All Posted Buses:</h3>";
       if (snapshot.empty) html += "<p>No buses found.</p>";
-      snapshot.forEach(doc => {
-        const data = doc.data();
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
         html += `
           <div>
             <strong>Bus:</strong> ${data.busName} (${data.busType})<br>
             <strong>Route:</strong> ${data.source} → ${data.destination}<br>
             <strong>Contact:</strong> ${data.contact}<br>
             <strong>Posted at:</strong> ${data.time}<br>
-            <button onclick="deleteBus('${doc.id}')">🗑 Delete</button>
+            <button onclick="deleteBus('${docSnap.id}')">🗑 Delete</button>
           </div>`;
       });
       busList.innerHTML = html;
@@ -95,9 +98,9 @@ function loadBuses() {
     });
 }
 
-function deleteBus(docId) {
+export function deleteBus(docId) {
   if (confirm("Are you sure you want to delete this bus?")) {
-    db.collection("buses").doc(docId).delete()
+    deleteDoc(doc(db, "buses", docId))
       .then(() => {
         alert("✅ Bus deleted.");
         loadBuses();
@@ -106,9 +109,7 @@ function deleteBus(docId) {
   }
 }
 
-function searchBus() {
-  const src = document.getElementById("src").value.trim();
-  const dest = document.getElementById("dest").value.trim();
+export function searchBus(src, dest) {
   const spinner = document.getElementById("loadingSpinner");
   const resultsDiv = document.getElementById("results");
 
@@ -116,10 +117,7 @@ function searchBus() {
   spinner.style.display = "block";
   resultsDiv.innerHTML = "";
 
-  db.collection("buses")
-    .where("source", "==", src)
-    .where("destination", "==", dest)
-    .get()
+  getDocs(query(collection(db, "buses"), where("source", "==", src), where("destination", "==", dest)))
     .then(snapshot => {
       spinner.style.display = "none";
       let html = snapshot.empty ? "❌ No buses found." : "<h3>Available Buses:</h3>";
@@ -134,4 +132,26 @@ function searchBus() {
       spinner.style.display = "none";
       resultsDiv.innerHTML = "❌ Error searching buses.";
     });
+}
+
+export function initUserWelcome() {
+  const welcomeMsg = document.getElementById("welcomeMsg");
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      const userRef = collection(db, "users");
+      getDocs(userRef).then(snapshot => {
+        let found = false;
+        snapshot.forEach(docSnap => {
+          if (docSnap.data().uid === user.uid) {
+            welcomeMsg.textContent = "Welcome, " + docSnap.data().name + " 👋";
+            found = true;
+          }
+        });
+        if (!found) welcomeMsg.textContent = "Welcome!";
+      });
+    } else {
+      welcomeMsg.textContent = "You're not logged in.";
+    }
+  });
 }

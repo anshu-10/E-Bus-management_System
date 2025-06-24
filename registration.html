@@ -1,74 +1,83 @@
-
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E-Bus Login / Register</title>
+  <link rel="stylesheet" href="CSS/style.css" />
+  <style>
+    body {
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+    }
 
-  <title>E-Bus Login</title>
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
 
+    h2 {
+      margin-bottom: 1rem;
+    }
 
+    input {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
 
-  <!-- Styles -->
+    button {
+      margin-top: 1rem;
+      padding: 0.7rem 1.5rem;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-  <link rel="stylesheet" href="CSS/style.css">
-
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 
-
-
 <body>
-
   <div class="container">
-
     <h2>Login / Register</h2>
 
+    <input type="text" id="name" placeholder="Full Name (for Register only)" />
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
 
-
-    <!-- Inside body -->
-
-<input type="text" id="name" placeholder="Full Name"><br>
-
-<input type="email" id="email" placeholder="Email"><br>
-
-<input type="password" id="password" placeholder="Password"><br>
-
-
-
-
-
-    <button onclick="register()">Register</button>
-
-    <button onclick="login()">Login</button>
-
+    <button onclick="handleRegister()">Register</button>
+    <button onclick="handleLogin()">Login</button>
   </div>
 
+  <!-- Firebase Logic -->
+  <script type="module">
+    import { register, login } from './js/script.js';
 
+    window.handleRegister = function () {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      register(name, email, password);
+    };
 
-  <!-- Firebase SDKs -->
-
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-
-
-  <!-- Firebase Config & Central Script -->
-
-  <script src="firebase/config.js"></script>
-
-  <script src="js/script.js"></script>
-  <script>
-  console.log("auth:", typeof auth !== 'undefined');
-  console.log("db:", typeof db !== 'undefined');
-</script>
-
+    window.handleLogin = function () {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      login(email, password);
+    };
+  </script>
 </body>
-
 </html>
-
-
-
-
