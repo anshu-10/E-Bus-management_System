@@ -1,34 +1,74 @@
+
 <!DOCTYPE html>
+
 <html>
+
 <head>
+
   <title>E-Bus Login</title>
 
+
+
   <!-- Styles -->
+
   <link rel="stylesheet" href="CSS/style.css">
+
 </head>
 
+
+
 <body>
+
   <div class="container">
+
     <h2>Login / Register</h2>
 
+
+
     <!-- Inside body -->
+
 <input type="text" id="name" placeholder="Full Name"><br>
+
 <input type="email" id="email" placeholder="Email"><br>
+
 <input type="password" id="password" placeholder="Password"><br>
 
 
+
+
+
     <button onclick="register()">Register</button>
+
     <button onclick="login()">Login</button>
+
   </div>
 
+
+
   <!-- Firebase SDKs -->
+
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
+
+
   <!-- Firebase Config & Central Script -->
+
   <script src="firebase/config.js"></script>
+
   <script src="js/script.js"></script>
+  <script>
+  console.log("auth:", typeof auth !== 'undefined');
+  console.log("db:", typeof db !== 'undefined');
+</script>
+
 </body>
+
 </html>
+
+
+
 

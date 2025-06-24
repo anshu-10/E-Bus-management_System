@@ -1,5 +1,6 @@
-// firebase/config.js
+// public/firebase/config.js
 
+// ✅ Initialize Firebase using compat method
 const firebaseConfig = {
   apiKey: "AIzaSyDTNT5g94Qyj1-vDjhapA_uPlbRH53d0kA",
   authDomain: "e-bus-management-system-45082.firebaseapp.com",
@@ -10,7 +11,9 @@ const firebaseConfig = {
   measurementId: "G-EYB6VSSBJ6"
 };
 
+// ✅ Initialize app and make auth/db global
 firebase.initializeApp(firebaseConfig);
-window.db = firebase.firestore();
-window.auth = firebase.auth();
+const auth = firebase.auth();
+const db = firebase.firestore();
+
 

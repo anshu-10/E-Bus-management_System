@@ -69,7 +69,7 @@
     <button onclick="logout()" style="margin-top: 1rem; padding: 0.6rem 1.2rem; border: none; border-radius: 8px; background: var(--accent); color: white; font-weight: bold;">🚪 Logout</button>
 
     <div class="home-buttons">
-      <a href="index.html">🔐 Login</a>
+      <a href="index2.html">🔐 Login</a>
       <a href="driver.html">🚌 Driver Panel</a>
       <a href="admin.html">🛠️ Admin Dashboard</a>
       <a href="user.html">🔎 Search Buses</a>
@@ -82,37 +82,50 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
   <script src="firebase/config.js"></script>
 
   <!-- ✅ Auth Logic -->
   <script>
-    auth.onAuthStateChanged(user => {
-  if (user) {
-    db.collection("users").doc(user.uid).get()
-      .then(doc => {
-        if (doc.exists) {
-          const name = doc.data().name;
-          document.getElementById("welcomeMsg").textContent = "Welcome, " + name + " 👋";
+    // Wait until Firebase is fully loaded
+    window.addEventListener('load', () => {
+      if (typeof auth === 'undefined' || typeof db === 'undefined') {
+        console.error("❌ Firebase 'auth' or 'db' not defined. Check firebase/config.js");
+        return;
+      }
+
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          db.collection("users").doc(user.uid).get()
+            .then(doc => {
+              if (doc.exists) {
+                const name = doc.data().name;
+                document.getElementById("welcomeMsg").textContent = "Welcome, " + name + " 👋";
+              } else {
+                document.getElementById("welcomeMsg").textContent = "Welcome!";
+              }
+            })
+            .catch((error) => {
+              console.warn("Firestore error:", error);
+              document.getElementById("welcomeMsg").textContent = "Welcome!";
+            });
         } else {
-          document.getElementById("welcomeMsg").textContent = "Welcome!";
+          document.getElementById("welcomeMsg").textContent = "You're not logged in.";
         }
-      })
-      .catch(() => {
-        document.getElementById("welcomeMsg").textContent = "Welcome!";
       });
-  } else {
-    document.getElementById("welcomeMsg").textContent = "You're not logged in.";
-  }
-});
 
-
-    function logout() {
-      auth.signOut().then(() => {
-        alert("You’ve been logged out.");
-        window.location.reload();
-      });
-    }
+      // Logout button handler
+      window.logout = function () {
+        auth.signOut().then(() => {
+          alert("You’ve been logged out.");
+          window.location.reload();
+        }).catch(error => {
+          console.error("Logout error:", error);
+        });
+      };
+    });
   </script>
 </body>
 </html>
+
 
