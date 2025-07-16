@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Seed Buses</title>
+</head>
+<body>
+  <h2>Seeding buses to Firebase...</h2>
+  <div id="status">Loading...</div>
+
+  <script type="module">
+    import { postBus } from './js/script.js';  // ✅ Use only this
+    // ✅ DON'T define postBus again
+
+    const buses = [
+        { busName: "Royal Saumik Express", busType: "AC sleeper", source: "nagpur", destination: "pune", contact: "8668440674" },
+      { busName: "Hululu", busType: "AC", source: "mumbai", destination: "nagpur", contact: "8668440674" },
+      { busName: "Harsh tututu", busType: "Non-AC", source: "pune", destination: "nagpur", contact: "8668440674" },
+      { busName: "Sun Travels", busType: "AC", source: "delhi", destination: "agra", contact: "9876543210" },
+      { busName: "Speed Bus", busType: "Non-AC", source: "bangalore", destination: "mysore", contact: "9898989898" },
+      { busName: "Rainbow Travels", busType: "AC sleeper", source: "chennai", destination: "coimbatore", contact: "9012345678" },
+      { busName: "ExpressWay", busType: "AC", source: "nagpur", destination: "hyderabad", contact: "9555555555" },
+      { busName: "King Line", busType: "AC sleeper", source: "jaipur", destination: "jodhpur", contact: "9223344556" },
+      { busName: "Red Wings", busType: "AC", source: "lucknow", destination: "kanpur", contact: "9112233445" },
+      { busName: "SpeedX", busType: "Non-AC", source: "surat", destination: "vadodara", contact: "8998877665" },
+      { busName: "Metro Rider", busType: "AC sleeper", source: "indore", destination: "bhopal", contact: "8668440674" },
+      { busName: "Galaxy Bus", busType: "Non-AC", source: "patna", destination: "ranchi", contact: "8321234567" },
+      { busName: "Blue Star", busType: "AC", source: "ahmedabad", destination: "rajkot", contact: "8444444444" },
+      { busName: "Turbo Bus", busType: "Non-AC", source: "kolkata", destination: "durgapur", contact: "9000000001" },
+      { busName: "GreenRide", busType: "AC", source: "goa", destination: "mumbai", contact: "9555123456" },
+      { busName: "Smart Coach", busType: "AC sleeper", source: "trivandrum", destination: "kochi", contact: "9988776655" },
+      { busName: "City Connect", busType: "Non-AC", source: "amritsar", destination: "chandigarh", contact: "8008008008" },
+      { busName: "Eco Bus", busType: "AC", source: "raipur", destination: "bhilai", contact: "7777777777" },
+      { busName: "Night Rider", busType: "AC sleeper", source: "varanasi", destination: "allahabad", contact: "6666666666" },
+      { busName: "Elite Travels", busType: "AC", source: "jammu", destination: "srinagar", contact: "9999999999" },
+      { busName: "Raj Express", busType: "AC sleeper", source: "udaipur", destination: "ajmer", contact: "8888888888" },
+      { busName: "Northline", busType: "Non-AC", source: "meerut", destination: "delhi", contact: "7777333344" },
+      { busName: "Dakshin Bus", busType: "AC", source: "madurai", destination: "chennai", contact: "7654321234" },
+      { busName: "Bharat Travels", busType: "AC sleeper", source: "nagpur", destination: "nashik", contact: "9090909090" },
+      { busName: "Aayush Express", busType: "Non-AC", source: "kolhapur", destination: "pune", contact: "7007007007" }  
+      
+      // add more as needed...
+    ];
+
+    const status = document.getElementById("status");
+
+    (async () => {
+      for (const bus of buses) {
+        await postBus(bus);  // ✅ Called only once
+        console.log("✅ Seeded:", bus.busName);
+      }
+      status.innerText = "✅ All buses seeded successfully!";
+    })();
+  </script>
+</body>
+</html>
